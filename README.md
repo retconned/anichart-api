@@ -9,7 +9,7 @@ docker build -t anichart-api .
 2. Run the container
 
 ```
-docker run --name anichart-api -p 8080:8080 -it --rm anichart-api
+docker run --name anichart-api -p 3000:3000 -it --rm anichart-api
 ```
 
 3. Kill the container

@@ -32,7 +32,6 @@ const app: Application = express();
 const port = process.env.PORT || 3000;
 
 // fetch data from anilist api
-
 async function fetchData(
     pageNumber: number,
     weekStart: number,
@@ -141,7 +140,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                         saturdaySchedule.push(formatedEntry);
                     } else {
                         for (let j = 0; j < saturdaySchedule.length; j++) {
-                            if (saturdaySchedule[j].media.id === formatedEntry.media.id) {
+                            const element = saturdaySchedule[j];
+                            if (element.media.id === formatedEntry.media.id) {
                                 break;
                             } else if (j === saturdaySchedule.length - 1) {
                                 saturdaySchedule.push(formatedEntry);
@@ -154,7 +154,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                         sundaySchedule.push(formatedEntry);
                     } else {
                         for (let j = 0; j < sundaySchedule.length; j++) {
-                            if (sundaySchedule[j].media.id === formatedEntry.media.id) {
+                            const element = sundaySchedule[j];
+                            if (element.media.id === formatedEntry.media.id) {
                                 break;
                             } else if (j === sundaySchedule.length - 1) {
                                 sundaySchedule.push(formatedEntry);
@@ -167,7 +168,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                         mondaySchedule.push(formatedEntry);
                     } else {
                         for (let j = 0; j < mondaySchedule.length; j++) {
-                            if (mondaySchedule[j].media.id === formatedEntry.media.id) {
+                            const element = mondaySchedule[j];
+                            if (element.media.id === formatedEntry.media.id) {
                                 break;
                             } else if (j === mondaySchedule.length - 1) {
                                 mondaySchedule.push(formatedEntry);
@@ -180,7 +182,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                         tuesdaySchedule.push(formatedEntry);
                     } else {
                         for (let j = 0; j < tuesdaySchedule.length; j++) {
-                            if (tuesdaySchedule[j].media.id === formatedEntry.media.id) {
+                            const element = tuesdaySchedule[j];
+                            if (element.media.id === formatedEntry.media.id) {
                                 break;
                             } else if (j === tuesdaySchedule.length - 1) {
                                 tuesdaySchedule.push(formatedEntry);
@@ -193,7 +196,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                         wednesdaySchedule.push(formatedEntry);
                     } else {
                         for (let j = 0; j < wednesdaySchedule.length; j++) {
-                            if (wednesdaySchedule[j].media.id === formatedEntry.media.id) {
+                            const element = wednesdaySchedule[j];
+                            if (element.media.id === formatedEntry.media.id) {
                                 break;
                             } else if (j === wednesdaySchedule.length - 1) {
                                 wednesdaySchedule.push(formatedEntry);
@@ -206,7 +210,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                         thursdaySchedule.push(formatedEntry);
                     } else {
                         for (let j = 0; j < thursdaySchedule.length; j++) {
-                            if (thursdaySchedule[j].media.id === formatedEntry.media.id) {
+                            const element = thursdaySchedule[j];
+                            if (element.media.id === formatedEntry.media.id) {
                                 break;
                             } else if (j === thursdaySchedule.length - 1) {
                                 thursdaySchedule.push(formatedEntry);
@@ -219,7 +224,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                         fridaySchedule.push(formatedEntry);
                     } else {
                         for (let j = 0; j < fridaySchedule.length; j++) {
-                            if (fridaySchedule[j].media.id === formatedEntry.media.id) {
+                            const element = fridaySchedule[j];
+                            if (element.media.id === formatedEntry.media.id) {
                                 break;
                             } else if (j === fridaySchedule.length - 1) {
                                 fridaySchedule.push(formatedEntry);
@@ -229,7 +235,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
                     break;
             }
         }
-        // push everyday schedule to a single weekly array
+
+        // push the schedule to a single object
         const weeklyArray = {
             saturdaySchedule,
             sundaySchedule,
@@ -240,13 +247,14 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
             fridaySchedule,
         };
 
-        let weeklySchedule = [];
         // random id generator using uuid
         function randomIdGenerator() {
             const id = uuidv4();
             return id;
         }
         const id = randomIdGenerator();
+
+        let weeklySchedule = [];
 
         weeklySchedule.push(
             { id: id, weekStart: weekStart, weekEnd: weekEnd },
@@ -259,10 +267,9 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
     }
 }
 
-async function serveData() {
+async function serveData(): Promise<any> {
     try {
         app.get("/", async (req: Request, res: Response): Promise<Response> => {
-            // const [weekStart, weekEnd] = dates();
             const weekStart = moment().startOf("week").unix();
             const weekEnd = moment().endOf("week").unix();
             const weeklySchedule = await scheduleFunc(weekStart, weekEnd);

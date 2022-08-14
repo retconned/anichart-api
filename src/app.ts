@@ -2,9 +2,7 @@ import moment from "moment";
 import axios from "axios";
 import express, { Application, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import dotenv from "dotenv";
 
-dotenv.config();
 
 type FormatedEntry = {
     id: number;
@@ -29,7 +27,7 @@ type FormatedEntry = {
 };
 
 const app: Application = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 // fetch data from anilist api
 async function fetchData(

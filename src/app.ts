@@ -3,7 +3,6 @@ import axios from "axios";
 import express, { Application, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 
-
 type FormatedEntry = {
     id: number;
     episode: number;
@@ -30,6 +29,7 @@ const app: Application = express();
 const port = 3000;
 
 // fetch data from anilist api
+
 async function fetchData(
     pageNumber: number,
     weekStart: number,
@@ -78,6 +78,8 @@ async function fetchData(
         console.log(error);
     }
 }
+
+// core logic for sorting and formatting data
 
 async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
     let finalArray: any = [];
@@ -132,6 +134,7 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
             };
 
             // sorting days and deleting duplicates
+
             switch (momentDate) {
                 case "Saturday":
                     if (saturdaySchedule.length === 0) {
@@ -234,7 +237,8 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
             }
         }
 
-        // push the schedule to a single object
+        // push the schedule into a single object
+
         const weeklyArray = {
             saturdaySchedule,
             sundaySchedule,
@@ -246,6 +250,7 @@ async function scheduleFunc(weekStart: number, weekEnd: number): Promise<any> {
         };
 
         // random id generator using uuid
+
         function randomIdGenerator() {
             const id = uuidv4();
             return id;
@@ -277,7 +282,11 @@ async function serveData(): Promise<any> {
         console.log(error);
     }
 }
+
+// serve api 
+
 serveData();
+
 app.listen(port, () => {
     console.log(`api is running at http://localhost:${port}`);
 });
